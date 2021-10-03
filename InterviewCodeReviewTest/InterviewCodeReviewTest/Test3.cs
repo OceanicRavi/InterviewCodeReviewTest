@@ -1,4 +1,5 @@
-﻿using System.Net.Mail;
+﻿using System;
+using System.Net.Mail;
 using System.Threading;
 
 namespace InterviewCodeReviewTest
@@ -10,6 +11,7 @@ namespace InterviewCodeReviewTest
 		// Each queue can be handled by multiple threads.
 		public class EmailSendQueue
 		{
+			private readonly Object _lock = new Object();
 			public int SentCount { get; private set; }
 			public int FailedCount { get; private set; }
 
@@ -29,7 +31,7 @@ namespace InterviewCodeReviewTest
 
 			private void UpdateStatistics(Result result)
 			{
-				lock (typeof(EmailSendQueue))
+				lock (_lock)
 				{
 					if (result.IsSuccessful)
 					{
