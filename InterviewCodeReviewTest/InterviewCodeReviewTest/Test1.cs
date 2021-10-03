@@ -12,8 +12,10 @@ namespace InterviewCodeReviewTest
 		public IEnumerable<Address> GetCustomerNumbers(string status)
 		{
 			var connection = new SqlConnection("data source=TestServer;initial catalog=CustomerDB;Trusted_Connection=True");
-			var cmd = new SqlCommand($"SELECT CustomerAddress FROM dbo.Customer WHERE Status = '{status}'", connection);
-
+			var cmd = new SqlCommand($"SELECT CustomerAddress FROM dbo.Customer WHERE Status = @StatusID", connection);
+			SqlParameter[] param = new SqlParameter[1];
+			param[0] = new SqlParameter("@StatusID", status);
+			cmd.Parameters.Add(param[0]);
 			try
 			{
 				var addressStrings = new List<string>();
